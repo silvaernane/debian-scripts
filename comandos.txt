@@ -1,0 +1,75 @@
+# Ubuntu setup – manual command list
+# ==================================
+
+## 1. Atualize o APT e instale pacotes básicos + GUI Flatpak
+sudo apt update
+sudo apt install -y git curl zip zsh fonts-powerline \
+                    gnome-tweaks gnome-software-plugin-flatpak
+
+## 2. Instale o Node.js LTS
+curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash -
+sudo apt install -y nodejs
+
+## 3. Instale Flatpak, adicione o Flathub e baixe o Extension Manager
+sudo apt install -y flatpak
+sudo flatpak remote-add --if-not-exists flathub \
+     https://flathub.org/repo/flathub.flatpakrepo
+flatpak install -y flathub com.mattjakeman.ExtensionManager
+
+## 4. Instale o Visual Studio Code (.deb oficial)
+wget -qO- https://packages.microsoft.com/keys/microsoft.asc | \
+  gpg --dearmor | sudo tee /etc/apt/trusted.gpg.d/microsoft.gpg >/dev/null
+sudo add-apt-repository -u -y \
+  "deb [arch=$(dpkg --print-architecture)] https://packages.microsoft.com/repos/code stable main"
+sudo apt install -y code
+
+## 5. Instale Oh My Zsh, tema Powerlevel10k e plugins
+# Oh My Zsh
+RUNZSH=no CHSH=no KEEP_ZSHRC=yes \
+  sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+
+# Diretório custom
+ZSH_CUSTOM="${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}"
+
+# Tema Powerlevel10k
+git clone --depth=1 https://github.com/romkatv/powerlevel10k.git \
+  "$ZSH_CUSTOM/themes/powerlevel10k"
+
+# Plugins adicionais
+git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
+git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
+git clone https://github.com/MichaelAquilina/zsh-you-should-use.git $ZSH_CUSTOM/plugins/you-should-use
+git clone https://github.com/fdellwing/zsh-bat.git $ZSH_CUSTOM/plugins/zsh-bat
+
+### Ajuste do ~/.zshrc (tema + plugins)
+cp -n "$HOME/.oh-my-zsh/templates/zshrc.zsh-template" "$HOME/.zshrc"   # cria se não existir
+sed -i 's/^ZSH_THEME=.*/ZSH_THEME="powerlevel10k\/powerlevel10k"/' "$HOME/.zshrc"
+sed -i 's/^plugins=.*/plugins=(git zsh-autosuggestions zsh-syntax-highlighting zsh-completions you-should-use zsh-bat)/' "$HOME/.zshrc"
+
+## 6. Instale o tema WhiteSur GTK e integre ao Flatpak
+git clone --depth=1 https://github.com/vinceliuice/WhiteSur-gtk-theme.git
+cd WhiteSur-gtk-theme
+./install.sh -l -o normal -t red -t orange -t blue
+sudo ./tweaks.sh -F -o normal -t red -t orange -t blue
+cd ..
+rm -rf WhiteSur-gtk-theme
+
+## 7. Instale o WhiteSur Icon Theme
+git clone --depth=1 https://github.com/vinceliuice/WhiteSur-icon-theme.git
+cd WhiteSur-icon-theme
+./install.sh -t red -t orange        # a variante blue já é gerada
+cd ..
+rm -rf WhiteSur-icon-theme
+
+## 8. Torne o Zsh o shell padrão
+chsh -s "$(command -v zsh)"
+
+# ------------------------------------------------------------------
+# PASSOS MANUAIS FINAIS
+# • Ative a extensão “User Themes” (via Extension Manager).
+# • Instale a fonte “Fira Code” (ou “Fira Code Nerd Font”) e defina-a
+#   como fonte monoespaçada no GNOME Terminal.
+# • No GNOME Tweaks escolha:
+#     Aplicativos & Shell → WhiteSur-Light
+#     Ícones               → WhiteSur-blue (ou red / orange)
+# • Faça logout / login para aplicar shell, tema e prompt.
