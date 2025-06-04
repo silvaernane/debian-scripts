@@ -1,4 +1,4 @@
-# PHP PDO OCI
+# Alguns conjuntos de scripts
 
-Pequeno conjunto de comandos que utilizo para instalar a extensão da Oracle para acessar seu banco de dados trabalhando com PHP
+Pequeno conjunto de comandos que utilizo para instalar alguns programas e configurações quando usando distribuições baseadas no Ubuntu/Debian
 
