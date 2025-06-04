@@ -91,6 +91,24 @@ sudo phpenmod pdo_oci
 sudo systemctl restart apache2
 
 # ---------------------------------------------------------------------------------------
+# Permissões
+sudo groupadd apachegrupo
+
+sudo usermod -aG apachegrupo seuusuario
+sudo usermod -aG apachegrupo www-data
+# Fazer logout e login novamente
+
+sudo chown -R :apachegrupo /var/www/html
+
+sudo chmod -R 770 /var/www/html
+
+# Leitura para todos os usuários
+sudo chmod -R 775 /var/www/html
+
+# Trocando grupo padrão para novas pastas e arquivos
+sudo find /var/www/html -type d -exec chmod g+s {} \;
+
+# ---------------------------------------------------------------------------------------
 # Adicionar ao ~/.zshrc
 export LD_LIBRARY_PATH=/opt/oracle/instantclient_19_27:$LD_LIBRARY_PATH
 
