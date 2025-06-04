@@ -22,11 +22,16 @@ sudo update-alternatives --config php-config
 
 # Baixar os zips do instant client (19 ou 21)
 sudo mkdir -p /opt/oracle
-# Colocar o nome do arquivo correto
+# Verificar nome dos arquivos
 sudo unzip instantclient-basic-linux.x64-*.zip -d /opt/oracle
-sudo unzip instantclient-sdk-linux.x64-*.zip   -d /opt/oracle
+sudo unzip instantclient-sdk-linux.x64-*.zip
+rm instantclient-sdk-linux.x64-*.zip
+# Colocar a versão correta
+cd instantclient-sdk-linux.x64-19.27.0.0.0dbru
+cd instantclient_19_27
+sudo mv sdk /opt/oracle/instantclient_19_27
 
-# Extrair e deixar com essa estrutura
+# Deixar com essa estrutura
 # /opt/oracle/instantclient_19_27/
 # ├── adrci
 # ├── libclntsh.so
@@ -43,7 +48,7 @@ sudo unzip instantclient-sdk-linux.x64-*.zip   -d /opt/oracle
 # │       ├── oci1.h
 # │       ├── ...
 
-#Se não tiver libclntsh.so crie um link:
+#Se não tiver libclntsh.so em /opt/oracle/instantclient_19_27 crie um link:
 sudo ln -s libclntsh.so.19.1 /opt/oracle/instantclient_19_27/libclntsh.so
 
 # Instalar libio1 e criar link simbólico
@@ -58,15 +63,14 @@ sudo ldconfig
 ldconfig -p | grep libclntsh
 #Deve aparecer libclntsh.so.19.1 (libc6,x86-64) => /opt/oracle/instantclient_19_27/libclntsh.so.19.1
 
-sudo apt install php-pear php7.4-dev -y
-
+# Apenas se for PHP >= 8.1.0
 sudo pecl install oci8
 # Quando solicitado, informe:
 # instantclient,/opt/oracle/instantclient_<versão>
 # Se não der certo para a sua versão, compilar diretamente
 
 
-# Baixar o código fonte
+# Baixar o código fonte (verificar versão php)
 wget https://www.php.net/distributions/php-7.4.33.tar.gz
 tar -xzf php-7.4.33.tar.gz
 cd php-7.4.33/ext/pdo_oci
@@ -82,8 +86,6 @@ make && sudo make install
 # Habilitar a extensão
 echo "extension=pdo_oci.so" | sudo tee /etc/php/7.4/mods-available/pdo_oci.ini
 sudo phpenmod pdo_oci
-sudo systemctl restart apache2
-
 
 # Ao final de tudo reiniciar o Apache
 sudo systemctl restart apache2
