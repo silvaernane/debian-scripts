@@ -91,22 +91,20 @@ sudo phpenmod pdo_oci
 sudo systemctl restart apache2
 
 # ---------------------------------------------------------------------------------------
-# Permissões
-sudo groupadd apachegrupo
+# Permissões para trabalhar nas pastas
+sudo usermod -aG www-data seu_usuario
 
-sudo usermod -aG apachegrupo seuusuario
-sudo usermod -aG apachegrupo www-data
-# Fazer logout e login novamente
+sudo chown -R seu_usuario:www-data /var/www
 
-sudo chown -R :apachegrupo /var/www/html
+sudo chmod -R 775 /var/www
 
-sudo chmod -R 770 /var/www/html
+sudo chmod g+s /var/www
 
-# Leitura para todos os usuários
-sudo chmod -R 775 /var/www/html
+# Verifique permissões
+ls -l /var/www
 
-# Trocando grupo padrão para novas pastas e arquivos
-sudo find /var/www/html -type d -exec chmod g+s {} \;
+# Teste criando arquivos com seu usuário
+touch /var/www/teste.txt
 
 # ---------------------------------------------------------------------------------------
 # Adicionar ao ~/.zshrc
