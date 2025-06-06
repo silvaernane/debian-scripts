@@ -25,11 +25,11 @@ sudo mkdir -p /opt/oracle
 # Verificar nome dos arquivos
 sudo unzip instantclient-basic-linux.x64-*.zip -d /opt/oracle
 sudo unzip instantclient-sdk-linux.x64-*.zip
-rm instantclient-sdk-linux.x64-*.zip
+rm instantclient*.zip
 # Colocar a versão correta
-cd instantclient-sdk-linux.x64-19.27.0.0.0dbru
-cd instantclient_19_27
-sudo mv sdk /opt/oracle/instantclient_19_27
+cd instantclient*
+# Dependendo da versão precisa: cd instantclient_19_27
+sudo mv sdk /opt/oracle/instantclient*
 
 # Deixar com essa estrutura
 # /opt/oracle/instantclient_19_27/
@@ -52,10 +52,10 @@ sudo mv sdk /opt/oracle/instantclient_19_27
 sudo ln -s libclntsh.so.19.1 /opt/oracle/instantclient_19_27/libclntsh.so
 
 # Instalar libio1 e criar link simbólico
-sudo apt install libaio1t64 build-essential php7.4-dev php-pear -y
+sudo apt install libaio1t64 build-essential php-pear -y
 sudo ln -s /usr/lib/x86_64-linux-gnu/libaio.so.1t64 /usr/lib/x86_64-linux-gnu/libaio.so.1
 
-# Colocar a versão do instantclient
+# Colocar a versão correta do instantclient, não funciona com curinga (*)
 echo '/opt/oracle/instantclient_19_27/' | sudo tee /etc/ld.so.conf.d/oracle-instantclient.conf
 sudo ldconfig
 
@@ -91,7 +91,7 @@ sudo phpenmod pdo_oci
 sudo systemctl restart apache2
 
 # ---------------------------------------------------------------------------------------
-# Permissões para trabalhar nas pastas
+# Permissões para trabalhar nas pastas do apache
 sudo usermod -aG www-data seu_usuario
 
 sudo chown -R seu_usuario:www-data /var/www
