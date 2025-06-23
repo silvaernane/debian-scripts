@@ -44,7 +44,7 @@ git clone https://github.com/fdellwing/zsh-bat.git $ZSH_CUSTOM/plugins/zsh-bat
 ### Ajuste do ~/.zshrc (tema + plugins)
 cp -n "$HOME/.oh-my-zsh/templates/zshrc.zsh-template" "$HOME/.zshrc"   # cria se não existir
 sed -i 's/^ZSH_THEME=.*/ZSH_THEME="powerlevel10k\/powerlevel10k"/' "$HOME/.zshrc"
-sed -i 's/^plugins=.*/plugins=(git zsh-autosuggestions zsh-syntax-highlighting zsh-completions you-should-use zsh-bat)/' "$HOME/.zshrc"
+sed -i 's/^plugins=.*/plugins=(git zsh-autosuggestions zsh-syntax-highlighting you-should-use zsh-bat)/' "$HOME/.zshrc"
 
 ## 6. Instale o tema WhiteSur GTK e integre ao Flatpak
 git clone --depth=1 https://github.com/vinceliuice/WhiteSur-gtk-theme.git
