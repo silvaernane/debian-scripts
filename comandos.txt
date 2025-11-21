@@ -1,15 +1,26 @@
-# Ubuntu setup – manual command list
+# Debian / ubuntu setup – manual command list
 # ==================================
 
-## 1. Atualize o APT e instale pacotes básicos + GUI Flatpak
-sudo apt update
-sudo apt install -y git curl zip zsh fonts-powerline \
-                    gnome-tweaks
+## Rode o comando de cada etapa separadamente
 
-## 5. Instale Oh My Zsh, tema Powerlevel10k e plugins
+## 1. Atualize o APT e instale pacotes básicos 
+sudo apt update
+sudo apt install -y git curl zip zsh \
+                    gnome-tweaks wget
+
+## 2. Instalar LSD, versão melhorada do comando 'ls'
+sudo apt install lsd
+
+## 3. Instalar Atuin, melhor histórico de comandos quando aperta seta pra cima ou CTRL + R no terminal
+curl --proto '=https' --tlsv1.2 -LsSf https://setup.atuin.sh | sh
+
+## 4. Instale Oh My Zsh, tema Powerlevel10k e plugins (melhora ainda mais o terminal)
 # Oh My Zsh
 RUNZSH=no CHSH=no KEEP_ZSHRC=yes \
   sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+
+## Difinir ZSH como terminal padrão
+chsh -s $(which zsh)
 
 ## Baixar fonts
 - https://github.com/romkatv/powerlevel10k-media/raw/master/MesloLGS%20NF%20Regular.ttf
@@ -17,9 +28,14 @@ RUNZSH=no CHSH=no KEEP_ZSHRC=yes \
 - https://github.com/romkatv/powerlevel10k-media/raw/master/MesloLGS%20NF%20Italic.ttf
 - https://github.com/romkatv/powerlevel10k-media/raw/master/MesloLGS%20NF%20Bold%20Italic.ttf
 
------------------------------------------------------------
+## Dois cliques nas fonts para instalar
 
-# Diretório custom
+## Vá nas configurações do terminal e defina a font como FiraCode
+
+-----------------------------------------------------------
+## Todos esses comandos até a próxima separação devem ser colados e executados de uma vez no terminal
+
+# Diretório custom (COPIE DAQUI...)
 ZSH_CUSTOM="${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}"
 
 # Tema Powerlevel10k
@@ -36,32 +52,12 @@ cp -n "$HOME/.oh-my-zsh/templates/zshrc.zsh-template" "$HOME/.zshrc"   # cria se
 sed -i 's/^ZSH_THEME=.*/ZSH_THEME="powerlevel10k\/powerlevel10k"/' "$HOME/.zshrc"
 sed -i 's/^plugins=.*/plugins=(git zsh-autosuggestions zsh-syntax-highlighting you-should-use)/' "$HOME/.zshrc"
 
+## (ATÉ AQUI)
+
 ----------------------------------------------------------
 
-## 6. Instale o tema WhiteSur GTK e integre ao Flatpak
-git clone --depth=1 https://github.com/vinceliuice/WhiteSur-gtk-theme.git
-cd WhiteSur-gtk-theme
-./install.sh -l -o normal -t red -t orange -t blue
-sudo ./tweaks.sh -F -o normal -t red -t orange -t blue
-cd ..
-rm -rf WhiteSur-gtk-theme
+## Instalar linux toys (utilitário que facilita a vida)
+curl -fsSL https://linux.toys/install.sh | bash
 
-## 7. Instale o WhiteSur Icon Theme
-git clone --depth=1 https://github.com/vinceliuice/WhiteSur-icon-theme.git
-cd WhiteSur-icon-theme
-./install.sh -t red -t orange        # a variante blue já é gerada
-cd ..
-rm -rf WhiteSur-icon-theme
-
-## 8. Torne o Zsh o shell padrão
-chsh -s "$(command -v zsh)"
-
-# ------------------------------------------------------------------
-# PASSOS MANUAIS FINAIS
-# • Ative a extensão “User Themes” (via Extension Manager).
-# • Instale a fonte “Fira Code” (ou “Fira Code Nerd Font”) e defina-a
-#   como fonte monoespaçada no GNOME Terminal.
-# • No GNOME Tweaks escolha:
-#     Aplicativos & Shell → WhiteSur-Light
-#     Ícones               → WhiteSur-blue (ou red / orange)
-# • Faça logout / login para aplicar shell, tema e prompt.
+## Recomendo adicionar o alias para o lsd no terminal (arquivo .zshrc na HOME)
+alias ls='lsd'
